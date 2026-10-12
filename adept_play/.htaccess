@@ -1,0 +1,26 @@
+# Clutch Arena - Apache Configuration
+DirectoryIndex index.php
+
+# Prevent directory listings
+Options -Indexes
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "(^\.|config\.php|\.sql)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable URL rewriting if supported
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+</IfModule>
